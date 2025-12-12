@@ -1,0 +1,45 @@
+--[[	example output:
+
+->	<compiler> <compiler-flags> <source-files> <main-file> -o <output-file> <library-paths> <header-paths>
+
+]]
+
+local compiler = "gcc"-- compiler
+local cflags = "-Wall"-- compiler flags
+local entrypoint = "server.c"-- the "main" file
+local includes = "-I./include -I../global-headers"-- string of paths to headers
+local src_paths = {"./src", "../global-implementation"}-- list of paths to implementation files
+local sources = ""-- string of .c files
+local outputfile = "server.o"-- output file name
+local libs = ""-- aka -l<library>
+
+for _, path in pairs(src_paths) do
+	local ls_handle = io.popen("ls ".. path)
+
+	if not ls_handle then
+		print("failed to open stdio stream ls")
+		return
+	end
+
+	local ls_result = ls_handle:read("*a")
+
+	if ls_result ~= "" then
+		sources = sources.. (" ".. ls_result:gsub("\n", " "):gsub(" $", "")):gsub(" +", " "..path.."/").. " "
+	end
+end
+
+
+
+local commandcompile = compiler.." "..cflags.. " ".. sources.. entrypoint.. " -o ".. outputfile.. " ".. libs.. " ".. includes
+
+local gcc_handle = io.popen(commandcompile)
+if not gcc_handle then
+	print("failed to open stdio stream gcc")
+	return
+end
+local log = gcc_handle:read("*a")
+if log == "" then
+	print("Compilation successful. run './".. outputfile.."' to run the program.")
+else
+	print(log)
+end
