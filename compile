@@ -6,11 +6,11 @@
 
 local compiler = "gcc"-- compiler
 local cflags = "-Wall"-- compiler flags
-local entrypoint = "server.c"-- the "main" file
+local entrypoint = "main.c"-- the "main" file
 local includes = "-I./include -I../global-headers"-- string of paths to headers
-local src_paths = {"./src", "../global-implementation"}-- list of paths to implementation files
+local src_paths = {"path1", "path2"}-- list of paths to implementation files
 local sources = ""-- string of .c files
-local outputfile = "server.o"-- output file name
+local outputfile = "app.o"-- output file name
 local libs = ""-- aka -l<library>
 
 for _, path in pairs(src_paths) do
